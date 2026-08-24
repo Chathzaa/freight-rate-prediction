@@ -3,8 +3,7 @@
 Solution for the Spotter Machine Learning Engineer assessment: predict `posted_rate`
 for 12,000 held-out freight loads, and produce the fixed December 2025 chart.
 
-Full write-up: [`report/freight_rate_report.pdf`](report/freight_rate_report.pdf)
-(source: [`report/report.md`](report/report.md)).
+Full write-up: [`report/freight_rate_report.pdf`](report/freight_rate_report.pdf).
 
 ## Result
 
@@ -58,8 +57,6 @@ Python 3.10+.
 python -m pip install -r requirements.txt
 ```
 
-`reportlab` is needed only to rebuild the PDF report; everything else runs without it.
-
 ## Running
 
 ```bash
@@ -88,11 +85,10 @@ python score.py \
   --output-dir outputs/figures
 ```
 
-To regenerate the report figures and the PDF:
+To regenerate the report figures:
 
 ```bash
 python -m src.figures
-python -m src.build_report
 ```
 
 Everything runs locally on CPU. A full `validate` plus `predict` takes about two
@@ -109,9 +105,8 @@ src/
   evaluate.py    temporal cross-validation protocol and metrics
   run.py         CLI entry point
   figures.py     report figures
-  build_report.py  renders report/report.md to PDF
 outputs/         predictions, metrics, figures
-report/          report source and PDF
+report/          the written report (PDF)
 score.py         provided scorer, unmodified
 ```
 
