@@ -1,10 +1,5 @@
 # Freight Rate Prediction
 
-Solution for the Spotter Machine Learning Engineer assessment: predict `posted_rate`
-for 12,000 held-out freight loads, and produce the fixed December 2025 chart.
-
-Full write-up: [`report/freight_rate_report.pdf`](report/freight_rate_report.pdf).
-
 ## Result
 
 Forward-chaining temporal validation, averaged over three folds:
@@ -59,8 +54,7 @@ python -m pip install -r requirements.txt
 
 ### Data
 
-The provided CSVs are not committed here, since the assessment dataset is not
-mine to republish. Drop the four files supplied with the assessment into `data/`,
+Drop the four files supplied with the assessment into `data/`,
 keeping these names:
 
 ```
@@ -107,13 +101,11 @@ To regenerate the report figures:
 python -m src.figures
 ```
 
-Everything runs locally on CPU. A full `validate` plus `predict` takes about two
-minutes.
 
 ## Layout
 
 ```
-data/            put the four provided CSVs here (not committed)
+data/            put the four provided CSVs here
 src/
   data.py        loading, cleaning, city-coordinate lookup
   features.py    feature engineering; which features are safe to extrapolate
@@ -123,7 +115,7 @@ src/
   figures.py     report figures
 outputs/         metrics, figures, December predictions
 report/          the written report (PDF)
-score.py         provided scorer, unmodified
+score.py         provided scorer
 ```
 
 ## Notes on the data
