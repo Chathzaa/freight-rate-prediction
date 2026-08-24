@@ -19,7 +19,7 @@ Forward-chaining temporal validation, averaged over three folds:
 About 1.3% of rows carry a corrupted `posted_rate` (roughly 3.3x or 0.29x the true
 value) that no model can recover. They dominate squared error, so both views are
 reported. A random split, which leaks same-day market information and is therefore
-only a noise floor, reaches 1.35% MAPE — the small gap to 1.58% is what the
+only a noise floor, reaches 1.35% MAPE. The small gap to 1.58% is what the
 two-month forecast horizon costs.
 
 ## Approach
@@ -76,8 +76,8 @@ python -m src.run all
 
 `predict` writes:
 
-- `outputs/validation_predictions.csv` — the 12,000 predictions, `load_id,predicted_rate`
-- `outputs/december_chart_inputs.csv` — the chart inputs with `predicted_rate` filled
+- `outputs/validation_predictions.csv`, the 12,000 predictions as `load_id,predicted_rate`
+- `outputs/december_chart_inputs.csv`, the chart inputs with `predicted_rate` filled
 
 Then validate the outputs and render the chart with the provided scorer:
 

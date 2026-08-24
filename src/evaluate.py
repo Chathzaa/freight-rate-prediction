@@ -2,7 +2,7 @@
 
 The real task predicts November and December from a model trained on January
 through October, so every held-out fold here is a contiguous block of future
-dates — a random split would leak the market level of the very days being
+dates. A random split would leak the market level of the very days being
 predicted and report an accuracy the submission cannot reproduce.  The last
 fold reproduces the submission's two-month horizon exactly.
 
@@ -125,9 +125,9 @@ def ablations(train: pd.DataFrame) -> pd.DataFrame:
 def holdout_reference(train: pd.DataFrame, config: ModelConfig | None = None) -> dict:
     """Random split, reported only as a noise floor.
 
-    This is not a validation estimate — it leaks same-day market information —
-    but the gap between it and the temporal folds is what the two-month forecast
-    horizon actually costs.
+    This is not a validation estimate, since it leaks same-day market
+    information, but the gap between it and the temporal folds is what the
+    two-month forecast horizon actually costs.
     """
     rng = np.random.default_rng(0)
     mask = rng.random(len(train)) < 0.8

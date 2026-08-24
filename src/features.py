@@ -9,7 +9,7 @@ The design follows what the exploration turned up (see report/report.md):
   date and the deviation is a much weaker per-load effect;
 * calendar structure enters as days-to-quarter-end hinges plus a linear time
   index, both of which extrapolate past the end of training;
-* ``quote_signal`` is deliberately excluded — it carries no signal once
+* ``quote_signal`` is deliberately excluded. It carries no signal once
   distance and the market level are accounted for, and including it measurably
   hurt held-out accuracy.
 

@@ -96,7 +96,7 @@ def fig_market_level(effect: pd.Series, train: pd.DataFrame) -> None:
     _style(ax, "Market rate level by day, load mix removed",
            "log rate per mile (centred)")
     _caption(ax, "Thin line: daily estimate.  Heavy line: 7-day mean.  Dashed rules mark "
-             "quarter boundaries — the level climbs through each quarter and resets.")
+             "quarter boundaries. The level climbs through each quarter and resets.")
     fig.tight_layout(rect=(0, 0.07, 1, 1))
     fig.savefig(FIGURES / "fig1_market_level.png", bbox_inches="tight")
     plt.close(fig)
@@ -196,7 +196,7 @@ def fig_market_index(effect: pd.Series, train: pd.DataFrame) -> None:
     ax.set_xticks(np.arange(7), names)
     ax.axhline(0, color=MUTED, linewidth=0.9)
     _style(ax, "Rates follow a weekly cycle", "deviation in log rate per mile")
-    _caption(ax, "Peak Thursday, trough Sunday — about a 2.1% swing, carried by "
+    _caption(ax, "Peak Thursday, trough Sunday, about a 2.1% swing carried by "
              "market_index rather than by the weekday itself.", width=58)
 
     fig.tight_layout(rect=(0, 0.05, 1, 1))

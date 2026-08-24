@@ -186,7 +186,7 @@ def decorate(canvas, doc) -> None:
     canvas.saveState()
     canvas.setFont("Helvetica", 7.6)
     canvas.setFillColor(INK_2)
-    canvas.drawString(MARGIN, 0.5 * inch, "Freight Rate Prediction — ML Engineer assessment")
+    canvas.drawString(MARGIN, 0.5 * inch, "Freight Rate Prediction, ML Engineer assessment")
     canvas.drawRightString(PAGE_W - MARGIN, 0.5 * inch, f"{doc.page}")
     canvas.setStrokeColor(RULE)
     canvas.setLineWidth(0.4)

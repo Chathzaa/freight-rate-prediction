@@ -6,8 +6,8 @@ tree cannot extrapolate that drift: beyond the last split it repeats its final
 value, which would leave every November and December prediction short.  A
 linear term in the time index does extrapolate it.  So the linear stage carries
 the parts of the signal that are smooth and need to run past the training
-window — distance, weight, market level, latitude, the time trend and the
-quarter-end ramp — and the booster is fitted to whatever the linear stage leaves
+window (distance, weight, market level, latitude, the time trend and the
+quarter-end ramp), and the booster is fitted to whatever the linear stage leaves
 behind, using only features that stay inside their training range.
 
 Robustness.  About 1.3% of training rows have a corrupted ``posted_rate``,
