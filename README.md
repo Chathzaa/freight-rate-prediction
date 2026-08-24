@@ -57,6 +57,21 @@ Python 3.10+.
 python -m pip install -r requirements.txt
 ```
 
+### Data
+
+The provided CSVs are not committed here, since the assessment dataset is not
+mine to republish. Drop the four files supplied with the assessment into `data/`,
+keeping these names:
+
+```
+data/train_test.csv
+data/validation.csv
+data/validation_predictions_template.csv
+data/december_chart_inputs.csv
+```
+
+Everything below then runs as written.
+
 ## Running
 
 ```bash
@@ -74,6 +89,7 @@ python -m src.run all
 `predict` writes:
 
 - `outputs/validation_predictions.csv`, the 12,000 predictions as `load_id,predicted_rate`
+  (submitted through the application form rather than committed here)
 - `outputs/december_chart_inputs.csv`, the chart inputs with `predicted_rate` filled
 
 Then validate the outputs and render the chart with the provided scorer:
@@ -97,7 +113,7 @@ minutes.
 ## Layout
 
 ```
-data/            provided CSVs (train_test, validation, template, december inputs)
+data/            put the four provided CSVs here (not committed)
 src/
   data.py        loading, cleaning, city-coordinate lookup
   features.py    feature engineering; which features are safe to extrapolate
@@ -105,7 +121,7 @@ src/
   evaluate.py    temporal cross-validation protocol and metrics
   run.py         CLI entry point
   figures.py     report figures
-outputs/         predictions, metrics, figures
+outputs/         metrics, figures, December predictions
 report/          the written report (PDF)
 score.py         provided scorer, unmodified
 ```
