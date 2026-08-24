@@ -136,6 +136,22 @@ values in November and December fall inside the range it was trained on. Days-to
 day-of-week and day-of-month all satisfy that; raw month and day-of-year do not, and are
 deliberately absent.
 
+Running the same folds against single-stage boosters confirms this is worth the extra
+machinery. `far month` is the median actual-over-predicted ratio on each fold's
+furthest-out month, where an inability to extrapolate shows up first; above 1 means the
+variant under-predicted.
+
+| Variant | MAPE (clean) | MAE (clean) | Far month ratio |
+|---|---|---|---|
+| Two-stage (submitted) | 1.58% | 36.82 | 0.996 |
+| Booster only, with time index | 1.87% | 43.50 | 1.002 |
+| Booster only, without time index | 3.30% | 78.71 | 1.041 |
+
+A booster given no time index under-predicts the furthest-out month by 4.1%, which is the
+trend it cannot follow. Giving it the time index recovers most of that but still trails the
+two-stage model, because inside the training range it spends capacity approximating a
+straight line with steps. Reproduce with `python -m src.run validate`.
+
 **Calibration.** I predict the conditional median in log space and exponentiate, without a
 smearing correction. The corrupted rows inflate the mean of the actuals by about 1.3%, so
 scaling predictions up would reduce raw bias but would roughly double the median error. For

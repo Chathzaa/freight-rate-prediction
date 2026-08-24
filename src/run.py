@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 from . import data
-from .evaluate import holdout_reference, temporal_cv
+from .evaluate import ablations, holdout_reference, temporal_cv
 from .features import MarketIndexTable
 from .model import ModelConfig, RateModel
 
@@ -32,9 +32,16 @@ def validate() -> None:
         f"\nRandom-split reference (leaks same-day market level, not a validation estimate): "
         f"MAPE_clean={ref['MAPE_clean_%']:.3f}%  MAE_clean={ref['MAE_clean']:.2f}"
     )
+    print("\nModel-family comparison on the same folds:\n")
+    table_ab = ablations(train)
+    print(table_ab.round(4).to_string())
+    print("\n  far_month_median_ratio > 1 means the variant under-predicted the "
+          "furthest-out month.")
+
     OUTPUTS.mkdir(parents=True, exist_ok=True)
     table.to_csv(OUTPUTS / "validation_metrics.csv")
-    print(f"\nWrote {OUTPUTS / 'validation_metrics.csv'}")
+    table_ab.to_csv(OUTPUTS / "ablations.csv")
+    print(f"\nWrote {OUTPUTS / 'validation_metrics.csv'} and {OUTPUTS / 'ablations.csv'}")
 
 
 def predict() -> None:

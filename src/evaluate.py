@@ -69,6 +69,59 @@ def temporal_cv(train: pd.DataFrame, config: ModelConfig | None = None) -> pd.Da
     return frame
 
 
+def booster_only(fit: pd.DataFrame, test: pd.DataFrame, market: MarketIndexTable,
+                 use_time_index: bool) -> np.ndarray:
+    """A single-stage booster, for the comparison that justifies the two-stage split."""
+    from sklearn.ensemble import HistGradientBoostingRegressor
+
+    from .features import FeatureBuilder, log_rate_per_mile
+
+    builder = FeatureBuilder(fit, market)
+    matrix, matrix_test = builder.build(fit), builder.build(test)
+    target = log_rate_per_mile(fit)
+    columns = list(matrix.columns)
+    if not use_time_index:
+        columns = [c for c in columns if c != "time_index"]
+
+    centre = np.median(target)
+    keep = np.abs(target - centre) < 4.0 * 1.4826 * np.median(np.abs(target - centre))
+    booster = HistGradientBoostingRegressor(
+        max_iter=500, learning_rate=0.05, max_leaf_nodes=31, min_samples_leaf=40,
+        l2_regularization=1.0, early_stopping=False, random_state=0)
+    booster.fit(matrix.loc[keep, columns], target[keep])
+    return np.exp(booster.predict(matrix_test[columns])) * test["distance"].to_numpy()
+
+
+def ablations(train: pd.DataFrame) -> pd.DataFrame:
+    """Compare the submitted model against single-stage boosters.
+
+    Also reports the median actual/predicted ratio on each fold's furthest-out
+    month, which is where a model that cannot extrapolate the trend gives itself
+    away: a ratio above 1 means it under-predicted.
+    """
+    rows = []
+    for train_end, test_start, test_end in FOLDS:
+        fit = train[train["date"] < train_end]
+        test = train[(train["date"] >= test_start) & (train["date"] <= test_end)]
+        market = MarketIndexTable(fit, test)
+        actual = test["posted_rate"].to_numpy()
+        far = (test["date"] >= pd.Timestamp(test_end) - pd.offsets.MonthBegin(1)).to_numpy()
+
+        variants = {
+            "two-stage (submitted)": RateModel(ModelConfig()).fit(fit, market).predict(test),
+            "booster only, with time index": booster_only(fit, test, market, True),
+            "booster only, without time index": booster_only(fit, test, market, False),
+        }
+        for name, predicted in variants.items():
+            scored = metrics(actual, predicted)
+            ratio = actual[far] / predicted[far]
+            ratio = ratio[(ratio > CORRUPT_LOW) & (ratio < CORRUPT_HIGH)]
+            rows.append({"variant": name, "MAPE_clean_%": scored["MAPE_clean_%"],
+                         "MAE_clean": scored["MAE_clean"],
+                         "far_month_median_ratio": float(np.median(ratio))})
+    return pd.DataFrame(rows).groupby("variant", sort=False).mean()
+
+
 def holdout_reference(train: pd.DataFrame, config: ModelConfig | None = None) -> dict:
     """Random split, reported only as a noise floor.
 

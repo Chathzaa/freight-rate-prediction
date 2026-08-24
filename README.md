@@ -41,6 +41,11 @@ upward throughout, so the split matters: a tree cannot extrapolate that drift, b
 linear time term can. The booster only sees features whose November and December
 values fall inside their training range.
 
+On the same folds, a single-stage booster with no time index under-predicts the
+furthest-out month by 4.1% and scores 3.30% MAPE; given the time index it reaches
+1.87%, still behind the two-stage model's 1.58%. `python -m src.run validate`
+reproduces that comparison.
+
 The key structural finding is that rates climb through each quarter and reset at the
 quarter boundary, rising about 5% over a quarter's final month. December is a
 quarter-end month, which is what shapes the required chart.
@@ -58,7 +63,8 @@ python -m pip install -r requirements.txt
 ## Running
 
 ```bash
-# temporal cross-validation -> outputs/validation_metrics.csv
+# temporal cross-validation + model-family comparison
+# -> outputs/validation_metrics.csv, outputs/ablations.csv
 python -m src.run validate
 
 # fit on all 48,000 rows, write both submission files
